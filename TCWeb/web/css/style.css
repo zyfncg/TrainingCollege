@@ -1,0 +1,33 @@
+.course-item{
+    height: 50px;
+}
+.login-body{
+    max-width: 400px;
+    padding: 45px 35px 45px;
+    margin: 30px auto;
+}
+.register-body{
+    max-width: 600px;
+    padding: 45px 35px 45px;
+    margin: 30px auto;
+}
+.submit-btn{
+    max-width: 300px;
+    align-content: center;
+}
+.userid,.name,.password{
+    height: 45px;
+}
+h3{
+    text-align: center;
+}
+input{
+    position: relative;
+    font-size: 16px;
+    height: auto;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+li{
+    list-style: none;
+}

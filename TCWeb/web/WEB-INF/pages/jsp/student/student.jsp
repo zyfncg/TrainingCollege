@@ -44,8 +44,8 @@
                 <div class="tab-pane fade in active" id="course">
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#choose-course"  data-toggle='tab'>选择课程</a></li>
-                        <li><a href="#reserve-course"  data-toggle='tab'>未开课</a></li>
-                        <li><a href="#studying-course" data-toggle='tab'>开课中</a></li>
+                        <li><a href="#reserve-course"  data-toggle='tab'>我的预定</a></li>
+                        <li><a href="#studying-course" data-toggle='tab'>我的学习</a></li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane fade in active" id="choose-course">

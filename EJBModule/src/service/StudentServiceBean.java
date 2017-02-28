@@ -53,6 +53,11 @@ public class StudentServiceBean implements StudentService {
     }
 
     @Override
+    public List<Course> getReserveCourses(String studentid) {
+        return null;
+    }
+
+    @Override
     public Student getStudentByID(String studentid) {
         Student student = studentDao.find(studentid);
         return student;

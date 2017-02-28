@@ -17,10 +17,10 @@ public interface StudentService {
     public List<Course> getAllCourses();
 
     public List<Course> getUnchooseCourses(String studendid);
-//
-//    public List<Course> getReserveCourses(String studentid);
-//
+
     public List<Course> getStudyCourses(String studentid);
+
+    public List<Course> getReserveCourses(String studentid);
 
     public Student getStudentByID(String studentid);
 

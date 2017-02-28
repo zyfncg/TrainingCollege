@@ -24,4 +24,20 @@ public class InstitutionDaoBean implements InstitutionDao {
         isValid = password.equals(institution.getPassword());
         return isValid;
     }
+
+    @Override
+    public void insert(Institution institution) {
+        em.persist(institution);
+    }
+
+    @Override
+    public Institution find(String institutionid) {
+        Institution institution = em.find(Institution.class, institutionid);
+        return institution;
+    }
+
+    @Override
+    public void update(Institution institution) {
+        em.merge(institution);
+    }
 }

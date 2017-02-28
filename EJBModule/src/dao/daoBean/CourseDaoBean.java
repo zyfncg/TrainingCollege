@@ -19,6 +19,33 @@ public class CourseDaoBean implements CourseDao{
     protected EntityManager em;
 
     @Override
+    public void add(Course course) {
+        em.persist(course);
+    }
+
+    @Override
+    public void updata(Course course) {
+        em.merge(course);
+    }
+
+    @Override
+    public void delete(Course course) {
+        em.remove(course);
+    }
+
+    @Override
+    public void delete(String courseid) {
+        Course course = em.find(Course.class,courseid);
+        em.remove(course);
+    }
+
+    @Override
+    public Course getCourseByID(String courseid) {
+        Course course = em.find(Course.class,courseid);
+        return course;
+    }
+
+    @Override
     public List<Course> getCoursesByInstitutionID(String institutionid) {
         String jpql = "SELECT c FROM Course c WHERE c.institution.id = :institutionid";
         Query query = em.createQuery(jpql);

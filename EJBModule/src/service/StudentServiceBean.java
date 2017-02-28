@@ -1,10 +1,8 @@
 package service;
 
-import dao.daoService.CourseDao;
-import dao.daoService.StudentDao;
+import dao.daoService.*;
 import factory.EJBFactory;
-import model.Course;
-import model.Student;
+import model.*;
 
 import javax.ejb.Stateless;
 import java.util.ArrayList;
@@ -18,8 +16,12 @@ public class StudentServiceBean implements StudentService {
 
     private String viewClassName = StudentDao.class.getName();
     private StudentDao studentDao = (StudentDao) EJBFactory.getEJB("ejb:/EJBModule_ejb_exploded/StudentDaoBean!" + viewClassName);
-
-    private CourseDao courseDao = (CourseDao) EJBFactory.getEJB("ejb:/EJBModule_ejb_exploded/CourseDaoBean!"+CourseDao.class.getName());
+    private AccountDao accountDao = (AccountDao) EJBFactory.getEJB(
+            "ejb:/EJBModule_ejb_exploded/AccountDaoBean!"+AccountDao.class.getName());
+    private BankcardDao bankcardDao = (BankcardDao) EJBFactory.getEJB(
+            "ejb:/EJBModule_ejb_exploded/BankcardDaoBean!"+BankcardDao.class.getName());
+    private StudCourseDao studCourseDao = (StudCourseDao) EJBFactory.getEJB(
+            "ejb:/EJBModule_ejb_exploded/StudCourseDaoBean!"+StudCourseDao.class.getName());
 
     @Override
     public boolean checkPassword(String studentid, String password) {
@@ -30,31 +32,35 @@ public class StudentServiceBean implements StudentService {
 
     @Override
     public List<Course> getAllCourses() {
-        List<Course> courses = courseDao.getAllCourses();
-        return courses;
+       return null;
     }
 
     @Override
     public List<Course> getUnchooseCourses(String studendid) {
-        return null;
+
+        List<Course> courseList = studCourseDao.getUnchooseCoursesByStudentID(studendid);
+        return courseList;
     }
 
-    //
-    //    public List<Course> getReserveCourses(String studentid);
-    //
+
     @Override
-    public List<Course> getStudyCourses(String studentid) {
-        Student student = studentDao.find(studentid);
-        List<Course> courseList = student.getCourses();
-        List<Course> studyingCourse = new ArrayList<>();
-        List<Course> reserveCourse = new ArrayList<>();
-        //TODO
-        return null;
+    public List<StudCourse> getStudyCourses(String studentid) {
+
+        List<StudCourse> courseList = studCourseDao.getStudyCoursesByStudentID(studentid);
+
+        return courseList;
     }
 
     @Override
-    public List<Course> getReserveCourses(String studentid) {
-        return null;
+    public List<StudCourse> getReserveCourses(String studentid) {
+        List<StudCourse> courseList = studCourseDao.getReserveCoursesByStudentID(studentid);
+        return courseList;
+    }
+
+    @Override
+    public List<StudCourse> getDropCourses(String studentid) {
+        List<StudCourse> courseList = studCourseDao.getDropCoursesByStudentID(studentid);
+        return courseList;
     }
 
     @Override
@@ -64,7 +70,60 @@ public class StudentServiceBean implements StudentService {
     }
 
     @Override
-    public void register(Student student) {
+    public void reserveCourse(String studentid, String courseid) {
+
+    }
+
+    @Override
+    public void studyCourse(String studentid, String courseid) {
+
+    }
+
+    @Override
+    public void dropReserveCourse(String studentid, String courseid) {
+
+    }
+
+    @Override
+    public void dropStudyCourse(String studentid, String courseid) {
+
+    }
+
+    @Override
+    public boolean bindBankcard(String studentid, String bankcardid) {
+        if(bankcardDao.isExist(bankcardid)){
+            Student student = studentDao.find(studentid);
+            Account account = student.getAccount();
+            account.setBankcardid(bankcardid);
+            accountDao.update(account);
+        }else{
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean deposit(String studentid, double money) {
+        Student student = studentDao.find(studentid);
+        Account account = student.getAccount();
+        Bankcard bankcard = bankcardDao.find(account.getBankcardid());
+        if(bankcard.getBalance() > money){
+            bankcardDao.withdraw(bankcard.getBankcardid(),money);
+            accountDao.deposit(account.getAccountid(),money);
+        }else {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean register(Student student) {
+        Account account = new Account();
+        account.setAccountid(student.getStudentid());
+        account.setMoney(0);
+        student.setAccount(account);
         studentDao.insert(student);
+        return true;
     }
 }

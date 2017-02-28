@@ -57,7 +57,8 @@ CREATE TABLE course(
  reserveNum int DEFAULT 0,
  dropReserveNum int DEFAULT 0,
  dropNum int DEFAULT 0,
- income double DEFAULT 0
+ income double DEFAULT 0,
+ unIncome DOUBLE DEFAULT 0
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO course(courseid, coursename, starttime, endtime, teacher, institutionid, price) VALUES ('10000001','J2EE与中间件','2017-01-22','2017-04-23','李华','9000001',398);
 INSERT INTO course(courseid, coursename, starttime, endtime, teacher, institutionid, price) VALUES ('10000002','嵌入式','2017-02-22','2017-05-23','刘欢','9000001',198);

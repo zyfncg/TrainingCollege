@@ -1,6 +1,7 @@
 package service;
 
 import model.Course;
+import model.StudCourse;
 import model.Student;
 
 import javax.ejb.Remote;
@@ -18,11 +19,23 @@ public interface StudentService {
 
     public List<Course> getUnchooseCourses(String studendid);
 
-    public List<Course> getStudyCourses(String studentid);
+    public List<StudCourse> getStudyCourses(String studentid);
 
-    public List<Course> getReserveCourses(String studentid);
+    public List<StudCourse> getReserveCourses(String studentid);
+
+    public List<StudCourse> getDropCourses(String studentid);
 
     public Student getStudentByID(String studentid);
 
-    public void register(Student student);
+    public void reserveCourse(String studentid, String courseid);
+    public void studyCourse(String studentid, String courseid);
+    public void dropReserveCourse(String studentid, String courseid);
+    public void dropStudyCourse(String studentid, String courseid);
+
+    public boolean bindBankcard(String studentid, String bankcardid);
+
+    public boolean deposit(String studentid,double money);
+//    public void pay(String studentid,double money);
+
+    public boolean register(Student student);
 }

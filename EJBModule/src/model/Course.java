@@ -26,6 +26,7 @@ public class Course implements Serializable{
     private int dropReserveNum;
     private int dropNum;
     private double income;
+    private double unIncome;
     private List<Student> students;
 
     @Id
@@ -129,6 +130,14 @@ public class Course implements Serializable{
 
     public void setIncome(double income) {
         this.income = income;
+    }
+
+    public double getUnIncome() {
+        return unIncome;
+    }
+
+    public void setUnIncome(double unIncome) {
+        this.unIncome = unIncome;
     }
 
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)

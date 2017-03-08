@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import service.InstitutionService;
 import service.StudentService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,7 +56,13 @@ public class LoginController {
 
     @RequestMapping(value = "/institutionCheck", method = RequestMethod.POST)
     public String checkInstitution(String login, String password,HttpServletRequest request, ModelMap model){
-        if(login.equals("9000001")){
+        InstitutionService institutionService = ServiceFactory.getInstitutionService();
+        if(institutionService.checkPassword(login, password)){
+            HttpSession session = request.getSession(false);
+            if (session == null){
+                session = request.getSession(true);
+            }
+            session.setAttribute("institutionid", login);
             return "redirect:/institution/institution";
         }else{
             String contextpath = request.getScheme() +"://" + request.getServerName()  + ":" +request.getServerPort() +request.getContextPath();

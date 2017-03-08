@@ -14,8 +14,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="${contextPath}/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${contextPath}/css/jquery-ui.min.css" rel="stylesheet">
     <link rel="stylesheet" href="${contextPath}/css/style.css">
-
+    <script>
+        function chooesCourse(obj) {
+            var ele = $(obj);
+            var courseid = ele.attr("id");
+            $( "#choose-course-confirm" ).dialog({
+                resizable: false,
+                height:240,
+                modal: true,
+                buttons: {
+                    "确认": function() {
+                        $(ele).text("已选");
+                        $(ele).attr("onclick","");
+                        $( this ).dialog( "close" );
+                        
+                    },
+                    "取消": function() {
+                        $( this ).dialog( "close" );
+                    }
+                }
+            });
+        }
+        function dropReserveCourse(obj) {
+            var ele = $(obj);
+            var courseid = ele.attr("id");
+            $( "#dropReserve-course-confirm" ).dialog({
+                resizable: false,
+                height:240,
+                modal: true,
+                buttons: {
+                    "确认": function() {
+                        $(ele).text("已退");
+                        $(ele).attr("onclick","");
+                        $( this ).dialog( "close" );
+                    },
+                    "取消": function() {
+                        $( this ).dialog( "close" );
+                    }
+                }
+            });
+        }
+        function dropCourse(obj) {
+            var ele = $(obj);
+            var courseid = ele.attr("id");
+            $( "#drop-course-confirm" ).dialog({
+                resizable: false,
+                height:240,
+                modal: true,
+                buttons: {
+                    "确认": function() {
+                        $(ele).text("已退");
+                        $(ele).attr("onclick","");
+                        $( this ).dialog( "close" );
+                    },
+                    "取消": function() {
+                        $( this ).dialog( "close" );
+                    }
+                }
+            });
+        }
+    </script>
 </head>
 <body>
     <nav class="navbar navbar-default navbar-static-top" role="navigation">
@@ -24,8 +84,8 @@
     <div class="body-page row">
         <div class="user-nav col-md-3">
             <div class="userinfo">
-                <h3>1234567</h3>
-                <h3>司马懿</h3>
+                <h3>${studentid}</h3>
+                <h3>${studentName}</h3>
             </div>
             <div class="console">
                 <ul class="nav nav-tabs nav-stacked">
@@ -51,75 +111,82 @@
                         <div class="tab-pane fade in active" id="choose-course">
                             <div class="course-list-panel">
                                 <ul class="courses-list">
-                                    <c:forEach var="course" items="${coursesAll}">
+                                    <c:forEach var="course" items="${unchoooseCourses}">
                                         <li>
                                             <div class="course-item row">
                                                 <div class="col-md-3 course-name">${course.courseName}</div>
                                                 <div class="col-md-3 course-time">${course.startTime}</div>
                                                 <div class="col-md-2 course-teacher">${course.teacher}</div>
                                                 <div class="col-md-2 course-price">${course.price}</div>
-                                                <div class="col-md-2"><a class="choose-btn" href="">参加</a></div>
+                                                <div class="col-md-2"><a id="${course.courseID}" class="choose-btn" onclick="chooesCourse(this)">参加</a></div>
                                             </div>
                                         </li>
                                     </c:forEach>
-                                    <li>
-                                        <div class="course-item row">
-                                            <div class="col-md-3 course-name">J2EE与中间件</div>
-                                            <div class="col-md-3 course-time">2017-01-26</div>
-                                            <div class="col-md-2 course-teacher">拉拉</div>
-                                            <div class="col-md-2 course-price">26.9</div>
-                                            <div class="col-md-2"><a class="choose-btn" href="">参加</a></div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="course-item row">
-                                            <div class="col-md-3 course-name">J2EE与中间件1</div>
-                                            <div class="col-md-3 course-time">2017-01-22</div>
-                                            <div class="col-md-2 course-teacher">拉拉1</div>
-                                            <div class="col-md-2 course-price">35.9</div>
-                                            <div class="col-md-2"><a class="choose-btn" href="">参加</a></div>
-                                        </div>
-                                    </li>
                                 </ul>
                             </div>
-                            <h3>J2EE与中间件1</h3>
-                            <h3>J2EE与中间件2</h3>
                         </div>
                         <div class="tab-pane fade" id="reserve-course">
-                            <h3>J2EE与中间件3</h3>
-                            <h3>J2EE与中间件4</h3>
+                            <div class="course-list-panel">
+                                <ul class="courses-list">
+                                    <c:forEach var="course" items="${resserveCourses}">
+                                        <li>
+                                            <div class="course-item row">
+                                                <div class="col-md-3 course-name">${course.course.courseName}</div>
+                                                <div class="col-md-3 course-time">${course.scTime}</div>
+                                                <div class="col-md-2 course-price">${course.course.price}</div>
+                                                <div class="col-md-2 course-teacher">${course.course.teacher}</div>
+                                                <div class="col-md-2"><a id="${course.id}" class="drop-reserve-btn" onclick="dropReserveCourse(this)">退订</a></div>
+                                            </div>
+                                        </li>
+                                    </c:forEach>
+                                </ul>
+                            </div>
                         </div>
                         <div class="tab-pane fade" id="studying-course">
-                            <h3>J2EE与中间件5</h3>
-                            <h3>J2EE与中间件6</h3>
+                            <div class="course-list-panel">
+                                <ul class="courses-list">
+                                    <c:forEach var="course" items="${studyCourses}">
+                                        <li>
+                                            <div class="course-item row">
+                                                <div class="col-md-3 course-name">${course.course.courseName}</div>
+                                                <div class="col-md-3 course-time">${course.scTime}</div>
+                                                <div class="col-md-2 course-teacher">${course.course.teacher}</div>
+                                                <div class="col-md-2 course-grade">${course.grade}</div>
+                                                <div class="col-md-2"><a id="${course.id}" class="drop-btn" onclick="dropCourse(this)">退课</a></div>
+                                            </div>
+                                        </li>
+                                    </c:forEach>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="account">
                     <div class="account-page">
                         <div class="account-banance">
-                            <p>余额： 333 元</p>
-                            <label for="recharge">充值金额：</label>
-                            <input type="text" id="recharge" name="recharge">
-                            <input type="submit" class="submit-btn btn btn-lg btn-primary btn-block" name='submit-recharge' value='充值'>
+                            <p>余额： ${balance}} 元</p>
+
                         </div>
                         <div class="bankcard">
 
-                            <form class="form-horizontal" role="form" method='POST' action='${contextPath}'>
+                            <div class="form-horizontal" role="form">
                                 <label for="bankcard">银行卡号:</label>
                                 <input type="text" id="bankcard" name="bankcard" class="bankcard form-control" value="1234567890">
-                                <input type="submit" class="submit-btn btn btn-lg btn-primary btn-block" name='submit-bind' value='绑定'>
-                            </form>
+                                <input type="submit" class="bind-btn btn btn-primary" name='submit-bind' value='绑定'>
+                                <label for="recharge">充值金额：</label>
+                                <input type="text" id="recharge" name="recharge">
+                                <input type="submit" class="recharge-btn btn btn-primary" name='submit-recharge' value='充值'>
+                            </div>
 
                         </div>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="vip">
                     <div class="vip-rank">
-                        <p>会员等级： 0 级</p>
+                        <p>会员等级：<span class="vip">${vip}</span> 级  <span class="vipState">${vipState}</span></p>
                     </div>
                     <div class="points">
-                        <p> 积分： 300 可用</p>
+                        <p> 积分： <span>${points}</span></p>
                     </div>
                     <div class="vip-manage">
                         <button class="stop-vip-btn">停止会员</button>
@@ -131,63 +198,36 @@
                     <div class="statistics-page">
                         <ul class="nav nav-tabs">
                             <li class="active"><a href="#end-course"  data-toggle='tab'>学习记录</a></li>
-                            <li><a href="#drop-course"  data-toggle='tab'>退课记录</a></li>
                             <li><a href="#consumption" data-toggle='tab'>消费记录</a></li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane fade in active" id="end-course">
                                 <div class="course-list-panel">
                                     <ul class="courses-list">
+                                    <c:forEach var="course" items="${studyCourses}">
                                         <li>
                                             <div class="course-item row">
-                                                <div class="col-md-6 course-name">J2EE与中间件</div>
-                                                <div class="col-md-6 course-time">2017-01-26</div>
+                                                <div class="col-md-6 course-name">${course.course.courseName}</div>
+                                                <div class="col-md-6 course-time">${course.course.startTime}</div>
                                             </div>
                                         </li>
-                                        <li>
-                                            <div class="course-item row">
-                                                <div class="col-md-6 course-name">J2EE与中间件1</div>
-                                                <div class="col-md-6 course-time">2017-01-22</div>
-                                            </div>
-                                        </li>
+                                    </c:forEach>
                                     </ul>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="drop-course">
-                                <div class="course-list-panel">
-                                    <ul class="courses-list">
-                                        <li>
-                                            <div class="course-item row">
-                                                <div class="col-md-6 course-name">软件工程</div>
-                                                <div class="col-md-6 course-time">2017-01-26</div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="course-item row">
-                                                <div class="col-md-6 course-name">嵌入式</div>
-                                                <div class="col-md-6 course-time">2017-01-22</div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+
                             <div class="tab-pane fade" id="consumption">
                                 <div class="course-list-panel">
                                     <ul class="courses-list">
+                                    <c:forEach var="course" items="${resserveCourses}">
                                         <li>
                                             <div class="course-item row">
-                                                <div class="col-md-5 course-time">2017-01-26</div>
-                                                <div class="col-md-5 course-name">J2EE与中间件</div>
-                                                <div class="col-md-2 course-price">26.9</div>
+                                                <div class="col-md-5 course-time">${course.scTime}</div>
+                                                <div class="col-md-5 course-name">${course.course.courseName}</div>
+                                                <div class="col-md-2 course-price">${course.course.price}</div>
                                             </div>
                                         </li>
-                                        <li>
-                                            <div class="course-item row">
-                                                <div class="col-md-5 course-time">2017-01-26</div>
-                                                <div class="col-md-5 course-name">J2EE与中间件1</div>
-                                                <div class="col-md-2 course-price">24.2</div>
-                                            </div>
-                                        </li>
+                                    </c:forEach>
                                     </ul>
                                 </div>
                             </div>
@@ -197,7 +237,79 @@
             </div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery.js"></script>
+    <div id="choose-course-confirm" title="提示">
+        <p>您确认购买该课程吗？</p>
+    </div>
+    <div id="dropReserve-course-confirm" title="提示">
+        <p>您确认退订该课程吗？</p>
+    </div>
+    <div id="drop-course-confirm" title="提示">
+        <p>退课后不返还学费，您确认退课吗？</p>
+    </div>
+    <script src="${contextPath}/js/jquery-3.1.1.min.js"></script>
     <script src="${contextPath}/js/bootstrap.min.js"></script>
+    <script src="${contextPath}/js/jquery-ui.min.js"></script>
+
+    <script>
+        $(document).ready(
+            function () {
+                var vip = $(".vip-rank span").text();
+                if (vip != "未激活") {
+                    $(".stop-vip-btn").attr("disabled", true);
+                }
+            }
+
+        );
+
+        $(".stop-vip-btn").click(function () {
+            var vip = $(".vip-rank .vipState").text();
+            if(vip != "未激活"){
+                $.ajax({
+                    type:"POST",
+                    dataType: 'json',
+                    url:"/student/cancelvip",
+                    error:function(data){
+                        alert("出错了！！:"+data.msg);
+                    },
+                    success:function(data){
+                        alert(data.msg);
+                    }
+                });
+            }
+        });
+        $(".exchange-point-btn").click(function () {
+            var point = $(".points span").text();
+            if(point > 0){
+
+            }else{
+                alert("积分不足,无法兑换");
+            }
+        });
+        $(".bind-btn").click(function () {
+            var bankcard = $("#bankcard").val();
+            if(bankcard != null){
+                $.ajax({
+                    data:{
+                        "bankcard":bankcard
+                    },
+                    type:"POST",
+                    dataType: 'json',
+                    url:"/student/bindbankcard",
+                    error:function(data){
+                        alert("出错了！！:"+data.msg);
+                    },
+                    success:function(data){
+                        alert(data.msg);
+                    }
+                });
+            }else{
+                alert("银行卡号不能为空");
+            }
+
+        });
+
+
+
+    </script>
 </body>
 </html>

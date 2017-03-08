@@ -27,10 +27,14 @@ public interface StudentService {
 
     public Student getStudentByID(String studentid);
 
-    public void reserveCourse(String studentid, String courseid);
-    public void studyCourse(String studentid, String courseid);
-    public void dropReserveCourse(String studentid, String courseid);
-    public void dropStudyCourse(String studentid, String courseid);
+    public boolean cancelVip(String studentid);
+
+    public boolean exchangePoint(String studentid);
+
+    public boolean reserveCourse(String studentid, String courseid);
+    public boolean studyCourse(String studentid, String courseid);
+    public boolean dropReserveCourse(String studentid, String courseid);
+    public boolean dropStudyCourse(String studentid, String courseid);
 
     public boolean bindBankcard(String studentid, String bankcardid);
 

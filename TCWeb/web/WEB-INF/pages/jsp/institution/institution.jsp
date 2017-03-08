@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: ZhangYF
@@ -48,15 +49,17 @@
                     <div class="tab-pane fade in active" id="have-course">
                         <div class="course-list-panel">
                             <ul class="courses-list">
+                                <c:forEach var="course" items="${courseList}">
                                 <li>
                                     <div class="course-item row">
-                                        <div class="col-md-3 course-name">J2EE与中间件</div>
-                                        <div class="col-md-3 course-time">2017-01-26</div>
-                                        <div class="col-md-2 course-teacher">拉拉</div>
-                                        <div class="col-md-2 course-price">26.9</div>
-                                        <div class="col-md-2"><a class="choose-btn" href="">修改</a></div>
+                                        <div class="col-md-3 course-name">${course.courseName}</div>
+                                        <div class="col-md-3 course-time">${course.startTime}</div>
+                                        <div class="col-md-2 course-teacher">${course.teacher}</div>
+                                        <div class="col-md-2 course-price">${course.price}</div>
+                                        <div class="col-md- course-state">${course.approveState}</div>
                                     </div>
                                 </li>
+                                </c:forEach>
                                 <li>
                                     <div class="course-item row">
                                         <div class="col-md-3 course-name">J2EE与中间件1</div>
@@ -71,7 +74,7 @@
                     </div>
                     <div class="tab-pane fade" id="new-course">
                         <div class="course-page">
-                            <form class="form-horizontal" role="form" method='POST' action='#'>
+                            <form class="form-horizontal" role="form" method='POST' action='${contextPath}/institution/createcourse'>
                                 <div class="form-group row">
                                     <label for="coursename" class="col-md-4 control-label">课程名</label>
                                     <div class="col-md-8">
@@ -145,13 +148,20 @@
             </div>
             <div class="tab-pane fade" id="course-statistic">
                 <div class="statistics-page">
-                    <div class="row">
-                        <div class="col-md-3 course-name"><p>J2EE与中间件</p></div>
-                        <div class="col-md-2 course-reserve-num"><p>55</p></div>
-                        <div class="col-md-2 course-dreserve-num"><p>9</p></div>
-                        <div class="col-md-2 course-drop-num"><p>11</p></div>
-                        <div class="col-md-2 course-income"><p>3200</p></div>
-                    </div>
+                    <ul class="courses-list">
+                        <c:forEach var="course" items="${courseList}">
+                            <li>
+                                <div class="row">
+                                    <div class="col-md-3 course-name"><p>${course.courseName}</p></div>
+                                    <div class="col-md-2 course-reserve-num"><p>${course.reserveNum}</p></div>
+                                    <div class="col-md-2 course-dreserve-num"><p>${course.dropReserveNum}</p></div>
+                                    <div class="col-md-2 course-drop-num"><p>${course.dropNum}</p></div>
+                                    <div class="col-md-2 course-income"><p>${course.income}</p></div>
+                                </div>
+                            </li>
+                        </c:forEach>
+                    </ul>
+
                 </div>
             </div>
         </div>

@@ -51,8 +51,8 @@ public class Student implements Serializable{
     }
 
 
-    @OneToOne
-    @JoinColumn(name = "accountid")
+    @OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "accountid" )
     @NotFound(action= NotFoundAction.IGNORE)
     public Account getAccount() {
         return account;

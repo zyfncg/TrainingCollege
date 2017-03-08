@@ -5,7 +5,8 @@ import factory.EJBFactory;
 import model.*;
 
 import javax.ejb.Stateless;
-import java.util.ArrayList;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -15,13 +16,16 @@ import java.util.List;
 public class StudentServiceBean implements StudentService {
 
     private String viewClassName = StudentDao.class.getName();
-    private StudentDao studentDao = (StudentDao) EJBFactory.getEJB("ejb:/EJBModule_ejb_exploded/StudentDaoBean!" + viewClassName);
+    private StudentDao studentDao = (StudentDao) EJBFactory.getEJB(
+            "ejb:/EJBModule_ejb_exploded/StudentDaoBean!" + viewClassName);
     private AccountDao accountDao = (AccountDao) EJBFactory.getEJB(
             "ejb:/EJBModule_ejb_exploded/AccountDaoBean!"+AccountDao.class.getName());
     private BankcardDao bankcardDao = (BankcardDao) EJBFactory.getEJB(
             "ejb:/EJBModule_ejb_exploded/BankcardDaoBean!"+BankcardDao.class.getName());
     private StudCourseDao studCourseDao = (StudCourseDao) EJBFactory.getEJB(
             "ejb:/EJBModule_ejb_exploded/StudCourseDaoBean!"+StudCourseDao.class.getName());
+    private CourseDao courseDao = (CourseDao) EJBFactory.getEJB(
+            "ejb:/EJBModule_ejb_exploded/CourseDaoBean!"+CourseDao.class.getName());
 
     @Override
     public boolean checkPassword(String studentid, String password) {
@@ -70,23 +74,87 @@ public class StudentServiceBean implements StudentService {
     }
 
     @Override
-    public void reserveCourse(String studentid, String courseid) {
+    public boolean cancelVip(String studentid) {
+        Student student = studentDao.find(studentid);
+        student.setVip(-student.getVip());
+        studentDao.update(student);
+        return true;
+    }
+
+    @Override
+    public boolean exchangePoint(String studentid) {
+        Student student = studentDao.find(studentid);
+        double point = student.getPoint();
+        Account account = student.getAccount();
+        account.setMoney(account.getMoney() + point);
+        student.setPoint(0);
+        studentDao.update(student);
+        return true;
+    }
+
+    @Override
+    public boolean reserveCourse(String studentid, String courseid) {
+        Student student = studentDao.find(studentid);
+        Course course = courseDao.getCourseByID(courseid);
+        Account account = student.getAccount();
+        double money = account.getMoney();
+        double price = course.getPrice();
+        if(money > price){
+            account.setMoney(money - price);
+            course.setUnIncome(course.getUnIncome() + price);
+            course.setReserveNum(course.getReserveNum() + 1);
+            accountDao.update(account);
+            courseDao.updata(course);
+
+            String studCourid = studentid + courseid;
+            StudCourse studCourse = new StudCourse();
+            studCourse.setId(studCourid);
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            studCourse.setScTime(Date.valueOf(df.format(new java.util.Date())));
+            studCourse.setStudent(student);
+            studCourse.setCourse(course);
+            studCourse.setState(StudCourState.REVERSE);
+            studCourseDao.addStudCourse(studCourse);
+            return true;
+        }else {
+            return false;
+        }
+
 
     }
 
     @Override
-    public void studyCourse(String studentid, String courseid) {
-
+    public boolean studyCourse(String studentid, String courseid) {
+        StudCourse studCourse = studCourseDao.getStudCourse(studentid,courseid);
+        studCourse.setState(StudCourState.STUDY);
+        Course course = studCourse.getCourse();
+        studCourseDao.updateStudCourse(studCourse);
+        return true;
     }
 
     @Override
-    public void dropReserveCourse(String studentid, String courseid) {
-
+    public boolean dropReserveCourse(String studentid, String courseid) {
+        StudCourse studCourse = studCourseDao.getStudCourse(studentid,courseid);
+        studCourse.setState(StudCourState.DROPREVERSE);
+        Course course = studCourse.getCourse();
+        course.setDropReserveNum(course.getDropReserveNum() + 1);
+        Student student = studCourse.getStudent();
+        Account account = student.getAccount();
+        double price = course.getPrice();
+        account.setMoney(account.getMoney() + price);
+        course.setUnIncome(course.getUnIncome() - price);
+        accountDao.update(account);
+        courseDao.updata(course);
+        studCourseDao.updateStudCourse(studCourse);
+        return true;
     }
 
     @Override
-    public void dropStudyCourse(String studentid, String courseid) {
-
+    public boolean dropStudyCourse(String studentid, String courseid) {
+        StudCourse studCourse = studCourseDao.getStudCourse(studentid,courseid);
+        studCourse.setState(StudCourState.DROP);
+        studCourseDao.updateStudCourse(studCourse);
+        return true;
     }
 
     @Override
@@ -108,7 +176,7 @@ public class StudentServiceBean implements StudentService {
         Student student = studentDao.find(studentid);
         Account account = student.getAccount();
         Bankcard bankcard = bankcardDao.find(account.getBankcardid());
-        if(bankcard.getBalance() > money){
+        if(bankcard != null && bankcard.getBalance() > money){
             bankcardDao.withdraw(bankcard.getBankcardid(),money);
             accountDao.deposit(account.getAccountid(),money);
         }else {

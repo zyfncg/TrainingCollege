@@ -23,7 +23,9 @@ public class StudentDaoBean implements StudentDao {
     public boolean checkPassword(String studentid, String password) {
         boolean isValid = false;
         Student student = em.find(Student.class,studentid);
-        isValid = password.equals(student.getPassword());
+        if(student != null){
+            isValid = password.equals(student.getPassword());
+        }
 
         return isValid;
     }

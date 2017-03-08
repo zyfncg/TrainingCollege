@@ -2,6 +2,8 @@ package factory;
 
 
 import service.GeneratorService;
+import service.InstitutionService;
+import service.ManagerService;
 import service.StudentService;
 
 /**
@@ -32,5 +34,31 @@ public class ServiceFactory {
         System.out.println(namespace);
         GeneratorService generatorService = (GeneratorService) EJBFactory.getEJB(namespace);
         return generatorService;
+    }
+
+    public static InstitutionService getInstitutionService(){
+        final String appName = "";
+        final String moduleName = "EJBModule_ejb_exploded";
+        final String distinctName = "";
+        final String beanName = "InstitutionServiceBean";
+        final String viewClassName = InstitutionService.class.getName();
+        final String namespace = "ejb:" + appName + "/" + moduleName
+                + "/" + distinctName + "/" + beanName + "!" + viewClassName;
+        System.out.println(namespace);
+        InstitutionService institutionService = (InstitutionService)EJBFactory.getEJB(namespace);
+        return institutionService;
+    }
+
+    public static ManagerService getManagerService(){
+        final String appName = "";
+        final String moduleName = "EJBModule_ejb_exploded";
+        final String distinctName = "";
+        final String beanName = "ManagerServiceBean";
+        final String viewClassName = ManagerService.class.getName();
+        final String namespace = "ejb:" + appName + "/" + moduleName
+                + "/" + distinctName + "/" + beanName + "!" + viewClassName;
+        System.out.println(namespace);
+        ManagerService managerService = (ManagerService)EJBFactory.getEJB(namespace);
+        return managerService;
     }
 }

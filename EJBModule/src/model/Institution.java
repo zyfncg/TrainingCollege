@@ -47,7 +47,7 @@ public class Institution implements Serializable{
         this.password = password;
     }
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "accountid")
     @NotFound(action= NotFoundAction.IGNORE)
     public Account getAccount() {

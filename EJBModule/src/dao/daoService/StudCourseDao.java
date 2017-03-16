@@ -17,6 +17,9 @@ public interface StudCourseDao {
     public void deleteStudCourse(StudCourse studCourse);
     public void deleteStudCourse(String studentid, String courseid);
 
+    public List<StudCourse> getAllCourses();
+    public List<StudCourse> getCoursesByCourseID(String courseid);
+    public List<StudCourse> getCoursesByState(String studentid,int state);
 
     public StudCourse getStudCourse(String studentid,String courseid);
     public List<StudCourse> getReserveCoursesByStudentID(String studentid);

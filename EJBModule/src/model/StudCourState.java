@@ -8,4 +8,5 @@ public class StudCourState {
     public static final int DROPREVERSE = 1;
     public static final int STUDY = 2;
     public static final int DROP = 3;
+    public static final int ENDSTUDY = 4;
 }

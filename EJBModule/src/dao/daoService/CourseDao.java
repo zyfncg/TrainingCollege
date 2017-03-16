@@ -20,4 +20,8 @@ public interface CourseDao {
     public List<Course> getCoursesByInstitutionID(String institutionid);
 
     public List<Course> getAllCourses();
+
+    public List<Course> getCourseByState(int state);
+
+    public List<Course> getUnapproveCourse();
 }

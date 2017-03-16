@@ -1,0 +1,24 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/security
+          http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <security:authentication-manager alias="authenticationManager">
+        <security:authentication-provider user-service-ref="customUserDetailsService"/>
+    </security:authentication-manager>
+
+    <security:http entry-point-ref="loginPageEntryPoint">
+        <security:intercept-url pattern="/login/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <security:intercept-url pattern="/admin.jsp" access="hasRole('student')" />
+        <security:intercept-url pattern="/**" access="ROLE_USER" />
+    </security:http>
+
+    <bean id="customUserDetailsService" class="security.CustomUserDetailsService"/>
+    <bean id="loginPageEntryPoint" class="security.LoginPageEntryPoint">
+        <property name="loginPageStrategy" ref="urlMappingLoginPageStrategy"/>
+    </bean>
+    <bean id="urlMappingLoginPageStrategy" class="security.LoginPageStrategy"/>
+</beans>

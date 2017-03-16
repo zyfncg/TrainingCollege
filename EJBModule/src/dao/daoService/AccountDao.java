@@ -11,6 +11,7 @@ import javax.ejb.Remote;
 public interface AccountDao {
     public void insert(Account account);
     public void update(Account account);
+    public Account find(String accountid);
     public void deposit(String accountid, double money);
     public boolean consume(String accountid, double money);
 

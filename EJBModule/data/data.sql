@@ -6,6 +6,7 @@ CREATE TABLE student (
   password char(20) NOT NULL,
   accountid char(9),
   vip int DEFAULT 0,
+  vipdays int DEFAULT 0,
   point double DEFAULT 0
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -13,6 +14,7 @@ INSERT INTO student(studentid,name,password) VALUES ('1234567','司马懿','1234
 INSERT INTO student(studentid,name,password) VALUES ('1000001','诸葛亮','123456');
 INSERT INTO student(studentid,name,password) VALUES ('1000002','曹植','123456');
 INSERT INTO student(studentid,name,password) VALUES ('1000003','刘庆','123456');
+INSERT INTO student(studentid,name,password,accountid) VALUES ('1000011','张仪','123456','1000011');
 
 DROP TABLE IF EXISTS account;
 CREATE TABLE account (

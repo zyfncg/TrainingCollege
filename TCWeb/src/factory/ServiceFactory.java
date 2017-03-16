@@ -1,10 +1,7 @@
 package factory;
 
 
-import service.GeneratorService;
-import service.InstitutionService;
-import service.ManagerService;
-import service.StudentService;
+import service.*;
 
 /**
  * Created by ZhangYF on 2017/2/6.
@@ -60,5 +57,18 @@ public class ServiceFactory {
         System.out.println(namespace);
         ManagerService managerService = (ManagerService)EJBFactory.getEJB(namespace);
         return managerService;
+    }
+
+    public static AuthorizeService getAuthorizeService(){
+        final String appName = "";
+        final String moduleName = "EJBModule_ejb_exploded";
+        final String distinctName = "";
+        final String beanName = "AuthorizeServiceBean";
+        final String viewClassName = AuthorizeService.class.getName();
+        final String namespace = "ejb:" + appName + "/" + moduleName
+                + "/" + distinctName + "/" + beanName + "!" + viewClassName;
+        System.out.println(namespace);
+        AuthorizeService authorizeService = (AuthorizeService)EJBFactory.getEJB(namespace);
+        return authorizeService;
     }
 }

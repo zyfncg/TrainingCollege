@@ -101,6 +101,8 @@ public class StudentController {
         }else{
             map.put("msg","充值失败");
         }
+        Student student = studentService.getStudentByID(studentid);
+        map.put("balance",student.getAccount().getMoney());
 
         return map;
     }

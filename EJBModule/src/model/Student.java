@@ -18,6 +18,7 @@ public class Student implements Serializable{
     private String password;
     private Account account;
     private int vip;
+    private int vipdays;
     private double point;
 
     private List<Course> courses;
@@ -71,6 +72,15 @@ public class Student implements Serializable{
         this.vip = vip;
     }
 
+    @Column(name = "vipdays")
+    public int getVipdays() {
+        return vipdays;
+    }
+
+    public void setVipdays(int vipdays) {
+        this.vipdays = vipdays;
+    }
+
     @Column(name = "point")
     public double getPoint() {
         return point;
@@ -80,7 +90,7 @@ public class Student implements Serializable{
         this.point = point;
     }
 
-    @ManyToMany(mappedBy = "students")
+    @ManyToMany(mappedBy = "students", fetch = FetchType.EAGER)
     public List<Course> getCourses() {
         return courses;
     }

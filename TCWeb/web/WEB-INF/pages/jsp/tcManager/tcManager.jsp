@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <title>Manager</title>
@@ -20,7 +21,7 @@
     <h3>TRAINING COLLEGE</h3>
 </nav>
 <div class="body-page row">
-    <div class="user-nav col-md-3">
+    <div class="authorUser-nav col-md-3">
         <div class="manager-info">
             <h3>9000001</h3>
             <h3>刘峰</h3>
@@ -40,27 +41,74 @@
         <div class="tab-content">
             <div class="tab-pane fade in active" id="approve-course">
                 <div class="approve-page">
-                    <div class="row course-approve-item">
-                        <div class="col-md-3 course-name">J2EE与中间件</div>
-                        <div class="col-md-3 course-starttime">2016-10-12</div>
-                        <div class="col-md-2 course-teacher">王松</div>
-                        <div class="col-md-2 course-price">342.0</div>
-                        <div class="col-md-2 course-result">
-                            <a class="course-pass" href="">YES</a><span>/</span>
-                            <a class="course-pass" href="">NO</a>
-                        </div>
+                    <div class="course-list-panel">
+                        <table class="table table-responsive table-condensed">
+                            <thead>
+                            <tr>
+                                <th>机构</th>
+                                <th>课程名</th>
+                                <th>开始时间</th>
+                                <th>结束时间</th>
+                                <th>教师</th>
+                                <th>价格</th>
+                                <th>审批</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach var="course" items="${approveCourses}">
+                                <tr>
+                                    <td>${course.institution.name}</td>
+                                    <td>${course.courseName}</td>
+                                    <td>${course.startTime}</td>
+                                    <td>${course.endTime}</td>
+                                    <td>${course.teacher}</td>
+                                    <td>${course.price}</td>
+                                    <td><a class="course-pass" id="${course.courseID}" onclick="passCourse(this)">YES</a>
+                                        <span>/</span>
+                                        <a class="course-deny" id="${course.courseID}" onclick="denyCourse(this)">NO</a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
                     </div>
+
                 </div>
             </div>
             <div class="tab-pane fade" id="balance">
                 <div class="balance-page">
-                    <div class="row">
-                        <div class="col-md-3 institution-name">南大清脑</div>
-                        <div class="col-md-3 institution-money">188888</div>
-                        <div class="col-md-3 institution-balance">
-                            <button class="col-md-2 balance-btn">结算</button>
-                        </div>
+                    <br>
+                    <div class="course-list-panel">
+                        <table class="table table-responsive table-condensed">
+                            <thead>
+                            <tr>
+                                <th>机构</th>
+                                <th>课程编号</th>
+                                <th>课程名</th>
+                                <th>结课时间</th>
+                                <th>教师</th>
+                                <th>收入</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach var="course" items="${settleCourses}">
+                                <tr>
+                                    <td>${course.institution.name}</td>
+                                    <td>${course.courseID}</td>
+                                    <td>${course.courseName}</td>
+                                    <td>${course.endTime}</td>
+                                    <td>${course.teacher}</td>
+                                    <td>${course.unIncome}</td>
+                                    <td><button id="${course.courseID}" class="choose-btn btn" onclick="settleCourse(this)">结算</button>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+
                     </div>
+
                 </div>
             </div>
             <div class="tab-pane fade" id="statistics">
@@ -72,21 +120,58 @@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane fade in active" id="institution-statistic">
-                            <div class="institution-list-panel">
-                                <div class="row">
-                                    <div class="col-md-4 institution-name">南大清脑</div>
-                                    <div class="col-md-4 institution-stud-num">1024</div>
-                                </div>
+                            <div class="institution-list-panel" style="max-width: 1000px; margin: 10px 20px">
+                                <table class="table table-responsive table-condensed table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>机构编号</th>
+                                        <th>机构名称</th>
+                                        <th>开课数</th>
+                                        <th>学生人数</th>
+                                        <th>退课人数</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <c:forEach var="institution" items="${institutionStats}">
+                                        <tr>
+                                            <td>${institution.institutionid}</td>
+                                            <td>${institution.institutionName}</td>
+                                            <td>${institution.courseNum}</td>
+                                            <td>${institution.studentNum}</td>
+                                            <td>${institution.dropNum}</td>
+                                        </tr>
+                                    </c:forEach>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="student-statistic">
-                            <div class="stud-list-panel">
-                                <div class="row">
-                                    <div class="col-md-3 student-id">1234567</div>
-                                    <div class="col-md-3 stud-study-num">5</div>
-                                    <div class="col-md-3 stud-end-num">16</div>
-                                    <div class="col-md-3 stud-drop-num">8</div>
-                                </div>
+                            <div class="stud-list-panel" style="max-width: 1000px; margin: 10px 20px">
+                                <table class="table table-responsive table-condensed table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>学生编号</th>
+                                        <th>姓名</th>
+                                        <th>完成课程数</th>
+                                        <th>预定课程数</th>
+                                        <th>在学课程数</th>
+                                        <th>退课课程数</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <c:forEach var="student" items="${studentStats}">
+                                        <tr>
+                                            <td>${student.studentid}</td>
+                                            <td>${student.studentName}</td>
+                                            <td>${student.finishNum}</td>
+                                            <td>${student.reserveNum}</td>
+                                            <td>${student.studyNum}</td>
+                                            <td>${student.dropNum}</td>
+                                        </tr>
+                                    </c:forEach>
+                                    </tbody>
+                                </table>
+
                             </div>
                         </div>
                         <div class="tab-pane fade" id="finance">
@@ -106,5 +191,64 @@
 </div>
 <script src="https://code.jquery.com/jquery.js"></script>
 <script src="${contextPath}/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(
+
+    );
+
+    function passCourse(obj) {
+        var ele = $(obj);
+        var courseid = ele.attr("id");
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            url:"/TCManager/approveCourse",
+            data: {
+                "courseid": courseid,
+                "result":"1"
+            },
+            success:function(data){
+                ele.parent().parent().remove();
+                alert(data.msg);
+            }
+        });
+    }
+
+    function denyCourse(obj) {
+        var ele = $(obj);
+        var courseid = ele.attr("id");
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            url:"/TCManager/approveCourse",
+            data: {
+                "courseid": courseid,
+                "result":"0"
+            },
+            success:function(data){
+                ele.parent().parent().remove();
+                alert(data.msg);
+            }
+        });
+    }
+
+    function settleCourse(obj) {
+        var ele = $(obj);
+        var courseid = ele.attr("id");
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            url:"/TCManager/settleCourse",
+            data: {
+                "courseid": courseid,
+            },
+            success:function(data){
+                ele.parent().parent().remove();
+                alert(data.msg);
+            }
+        });
+
+    }
+</script>
 </body>
 </html>

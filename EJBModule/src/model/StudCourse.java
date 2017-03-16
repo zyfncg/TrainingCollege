@@ -50,7 +50,7 @@ public class StudCourse implements Serializable{
         this.state = state;
     }
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne(cascade=CascadeType.MERGE)
     @JoinColumn(name = "studentid")
     public Student getStudent() {
         return student;
@@ -60,7 +60,7 @@ public class StudCourse implements Serializable{
         this.student = student;
     }
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne(cascade=CascadeType.MERGE)
     @JoinColumn(name = "courseid")
     public Course getCourse() {
         return course;

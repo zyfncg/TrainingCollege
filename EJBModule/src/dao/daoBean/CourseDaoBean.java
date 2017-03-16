@@ -41,6 +41,9 @@ public class CourseDaoBean implements CourseDao{
 
     @Override
     public Course getCourseByID(String courseid) {
+        if(courseid == null){
+            return null;
+        }
         Course course = em.find(Course.class,courseid);
         return course;
     }
@@ -61,4 +64,23 @@ public class CourseDaoBean implements CourseDao{
         List<Course> courseList = query.getResultList();
         return courseList;
     }
+
+    @Override
+    public List<Course> getCourseByState(int state) {
+        String jpql = "SELECT c FROM Course c WHERE c.approveState = :state";
+        Query query = em.createQuery(jpql);
+        query.setParameter("state",state);
+        List<Course> courseList = query.getResultList();
+        return courseList;
+    }
+
+    @Override
+    public List<Course> getUnapproveCourse() {
+        String jpql = "SELECT c FROM Course c WHERE c.approveState = 0";
+        Query query = em.createQuery(jpql);
+        List<Course> courseList = query.getResultList();
+        return courseList;
+    }
+
+
 }

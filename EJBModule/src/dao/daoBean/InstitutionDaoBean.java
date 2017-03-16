@@ -6,6 +6,8 @@ import model.Institution;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import java.util.List;
 
 /**
  * Created by ZhangYF on 2017/2/19.
@@ -39,5 +41,13 @@ public class InstitutionDaoBean implements InstitutionDao {
     @Override
     public void update(Institution institution) {
         em.merge(institution);
+    }
+
+    @Override
+    public List<Institution> getAllInstitution() {
+        String jpql = "SELECT i FROM Institution i";
+        Query query = em.createQuery(jpql);
+        List<Institution> list = query.getResultList();
+        return list;
     }
 }

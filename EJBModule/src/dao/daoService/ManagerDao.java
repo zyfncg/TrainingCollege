@@ -1,5 +1,7 @@
 package dao.daoService;
 
+import model.Manager;
+
 import javax.ejb.Remote;
 
 /**
@@ -7,4 +9,10 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface ManagerDao {
+    public boolean checkPassword(String managerid, String password);
+
+    public boolean update(Manager manager);
+
+    public Manager find(String managerid);
+
 }

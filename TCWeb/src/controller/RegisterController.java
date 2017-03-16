@@ -1,12 +1,14 @@
 package controller;
 
 import factory.ServiceFactory;
+import model.Institution;
 import model.Student;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import service.GeneratorService;
+import service.InstitutionService;
 import service.StudentService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,13 +53,21 @@ public class RegisterController {
         String contextpath = request.getScheme() +"://" + request.getServerName()  + ":" +request.getServerPort() +request.getContextPath();
         model.addAttribute("contextPath",contextpath);
         model.addAttribute("actionURL",contextpath+"/register/registerInstitution");
-        model.addAttribute("institutionid", "5000001");
+        String institutionid = generatorService.getInstitutionid();
+        model.addAttribute("institutionid", institutionid);
         return "register/institutionRegister";
     }
 
     @RequestMapping(value = "/registerInstitution")
     public String institutionRegister(HttpServletRequest request, ModelMap model){
 
+        Institution institution = new Institution();
+        institution.setInstitutionid(request.getParameter("institutionid"));
+        institution.setName(request.getParameter("name"));
+        institution.setPassword(request.getParameter("password"));
+
+        InstitutionService institutionService = ServiceFactory.getInstitutionService();
+        institutionService.register(institution);
         return "redirect:/login/institution";
     }
 

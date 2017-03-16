@@ -6,6 +6,8 @@ import model.Student;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import java.util.List;
 
 /**
  * Created by Zhang YF on 2016/12/19.
@@ -49,6 +51,14 @@ public class StudentDaoBean implements StudentDao {
     @Override
     public void update(Student student) {
         em.merge(student);
+    }
+
+    @Override
+    public List<Student> getAllStudent() {
+        String jpql = "SELECT s FROM Student s";
+        Query query = em.createQuery(jpql);
+        List<Student> list = query.getResultList();
+        return list;
     }
 
 

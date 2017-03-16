@@ -27,11 +27,21 @@ public class GeneratorServiceBean implements GeneratorService{
 
     @Override
     public String getInstitutionid() {
-        return null;
+        GeneratorBean generatorBean = generatorDao.getGenerator();
+        String institutionid = generatorBean.getInstitutionid();
+        Long institution = Long.parseLong(institutionid) + 1;
+        generatorBean.setInstitutionid(String.valueOf(institution));
+        generatorDao.save(generatorBean);
+        return institutionid;
     }
 
     @Override
     public String getCourseid() {
-        return null;
+        GeneratorBean generatorBean = generatorDao.getGenerator();
+        String courseid = generatorBean.getCourseid();
+        Long course = Long.parseLong(courseid) + 1;
+        generatorBean.setCourseid(String.valueOf(course));
+        generatorDao.save(generatorBean);
+        return courseid;
     }
 }

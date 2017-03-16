@@ -73,7 +73,7 @@ public class Course implements Serializable{
         this.teacher = teacher;
     }
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne(cascade=CascadeType.MERGE)
     @JoinColumn(name = "institutionid")
     @NotFound(action= NotFoundAction.IGNORE)
     public Institution getInstitution() {

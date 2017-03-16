@@ -3,6 +3,7 @@ package dao.daoService;
 import model.Student;
 
 import javax.ejb.Remote;
+import java.util.List;
 
 /**
  * Created by Zhang YF on 2016/12/19.
@@ -17,5 +18,7 @@ public interface StudentDao {
     public Student find(String studentid);
 
     public void update(Student student);
+
+    public List<Student> getAllStudent();
 
 }

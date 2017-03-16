@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: ZhangYF
@@ -13,6 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="${contextPath}/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${contextPath}/css/jquery-ui.min.css" rel="stylesheet">
     <link rel="stylesheet" href="${contextPath}/css/style.css">
 </head>
 <body>
@@ -22,14 +24,13 @@
 <div class="body-page row">
     <div class="user-nav col-md-3">
         <div class="institution-info">
-            <h3>9000001</h3>
-            <h3>南京大学软件学院</h3>
+            <h3>${institutionid}</h3>
+            <h3>${institutionName}</h3>
         </div>
         <div class="console">
             <ul class="nav nav-tabs nav-stacked">
                 <li class="active"><a href="#course" data-toggle="tab">班级管理</a></li>
-                <li ><a href="#account" data-toggle="tab">账户管理</a></li>
-                <li ><a href="#student-record" data-toggle="tab">学员登记</a></li>
+                <li ><a href="#student-record" data-toggle="tab">课程登记</a></li>
                 <li ><a href="#course-statistic" data-toggle="tab">课程统计</a></li>
             </ul>
         </div>
@@ -47,33 +48,40 @@
                 <div class="tab-content">
                     <div class="tab-pane fade in active" id="have-course">
                         <div class="course-list-panel">
-                            <ul class="courses-list">
-                                <li>
-                                    <div class="course-item row">
-                                        <div class="col-md-3 course-name">J2EE与中间件</div>
-                                        <div class="col-md-3 course-time">2017-01-26</div>
-                                        <div class="col-md-2 course-teacher">拉拉</div>
-                                        <div class="col-md-2 course-price">26.9</div>
-                                        <div class="col-md-2"><a class="choose-btn" href="">修改</a></div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="course-item row">
-                                        <div class="col-md-3 course-name">J2EE与中间件1</div>
-                                        <div class="col-md-3 course-time">2017-01-22</div>
-                                        <div class="col-md-2 course-teacher">拉拉1</div>
-                                        <div class="col-md-2 course-price">35.9</div>
-                                        <div class="col-md-2"><a class="choose-btn" href="">参加</a></div>
-                                    </div>
-                                </li>
-                            </ul>
+                            <table class="table table-responsive table-condensed table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>课程名</th>
+                                    <th>开始时间</th>
+                                    <th>结束时间</th>
+                                    <th>教师</th>
+                                    <th>价格</th>
+                                    <th>审核状态</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <c:forEach var="course" items="${courseList}">
+                                    <tr>
+                                        <td>${course.courseName}</td>
+                                        <td>${course.startTime}</td>
+                                        <td>${course.endTime}</td>
+                                        <td>${course.teacher}</td>
+                                        <td>${course.price}</td>
+                                        <td><span class="course-state">${course.approveState}</span></td>
+                                        <td><a class="modify-course " href="${contextPath}/institution/modifyCoursePage?courseid=${course.courseID}">修改</a></td>
+                                    </tr>
+                                </c:forEach>
+                                </tbody>
+                            </table>
+
                         </div>
                     </div>
                     <div class="tab-pane fade" id="new-course">
-                        <div class="course-page">
-                            <form class="form-horizontal" role="form" method='POST' action='#'>
+                        <div class="course-page" style="margin: 40px auto;max-width: 500px;">
+                            <form class="form-horizontal" role="form" method="post">
                                 <div class="form-group row">
-                                    <label for="coursename" class="col-md-4 control-label">课程名</label>
+                                    <label for="coursename" class="col-md-2 control-label">课程名</label>
                                     <div class="col-md-8">
                                         <input type='text' id="coursename" class="form-control" name='coursename' required>
                                     </div>
@@ -104,7 +112,7 @@
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-md-offset-3 col-md-6">
-                                        <input type='submit' class="submit-btn btn btn-lg btn-primary btn-block" name='submit' value='申请开课'>
+                                        <input class="submit-btn btn btn-lg btn-primary btn-block" name='submit-btn' value='申请开课'>
                                     </div>
                                 </div>
                             </form>
@@ -112,52 +120,113 @@
                     </div>
                 </div>
             </div>
-            <div class="tab-pane fade" id="account">
-                <div class="account-page">
-                    <div class="bankcard">
-                        <form class="form-horizontal" role="form" method='POST' action='${contextPath}'>
-                            <label for="bankcard">银行卡号:</label>
-                            <input type="text" id="bankcard" name="bankcard" class="bankcard form-control" value="1234567890">
-                            <input type="submit" class="submit-btn btn btn-lg btn-primary btn-block" name='submit-bind' value='绑定'>
-                        </form>
 
-                    </div>
-                </div>
-            </div>
             <div class="tab-pane fade" id="student-record">
-                <div class="">
-                    <div class="course-info">
-                        <h3>J2EE与中间件</h3>
-                        <div class="student-record">
-                            <div class="row">
-                                <div class="col-md-3 course-name"><p>J2EE与中间件</p></div>
-                                <div class="col-md-3 student-id"><p>1234567</p></div>
-                                <div class="col-md-3 grade">
-                                    <input type="text" class="grade">
-                                </div>
-                            </div>
-                            <div class="save">
-                                <button class="col-md-3 col-md-offset-3 save-btn" name="save">保存</button>
-                            </div>
-                        </div>
-                    </div>
+                <div class="course-list-panel">
+                    <table class="table table-responsive table-condensed">
+                        <thead>
+                        <tr>
+                            <th>课程名</th>
+                            <th>开始时间</th>
+                            <th>结束时间</th>
+                            <th>教师</th>
+                            <th>选择</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach var="course" items="${courseList}">
+                            <tr>
+                                <td>${course.courseName}</td>
+                                <td>${course.startTime}</td>
+                                <td>${course.endTime}</td>
+                                <td>${course.teacher}</td>
+                                <td><a href="${contextPath}/institution/recordgrade?courseid=${course.courseID}">登记</a></td>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
+
                 </div>
             </div>
             <div class="tab-pane fade" id="course-statistic">
+                <div class="balacne">
+                    <h3>账户金额：<span>${balance}</span> 元</h3>
+                </div>
                 <div class="statistics-page">
-                    <div class="row">
-                        <div class="col-md-3 course-name"><p>J2EE与中间件</p></div>
-                        <div class="col-md-2 course-reserve-num"><p>55</p></div>
-                        <div class="col-md-2 course-dreserve-num"><p>9</p></div>
-                        <div class="col-md-2 course-drop-num"><p>11</p></div>
-                        <div class="col-md-2 course-income"><p>3200</p></div>
+                    <div class="course-list-panel">
+                        <table class="table table-responsive table-condensed table-bordered">
+                            <thead>
+                            <tr>
+                                <th>课程编号</th>
+                                <th>课程名</th>
+                                <th>开始时间</th>
+                                <th>结束时间</th>
+                                <th>教师</th>
+                                <th>价格</th>
+                                <th>预定人数</th>
+                                <th>退定人数</th>
+                                <th>退课人数</th>
+                                <th>收入</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach var="course" items="${courseList}">
+                                <tr>
+                                    <td>${course.courseID}</td>
+                                    <td>${course.courseName}</td>
+                                    <td>${course.startTime}</td>
+                                    <td>${course.endTime}</td>
+                                    <td>${course.teacher}</td>
+                                    <td>${course.price}</td>
+                                    <td>${course.reserveNum}</td>
+                                    <td>${course.dropReserveNum}</td>
+                                    <td>${course.dropNum}</td>
+                                    <td>${course.income}</td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery.js"></script>
+<script src="${contextPath}/js/jquery-3.1.1.min.js"></script>
 <script src="${contextPath}/js/bootstrap.min.js"></script>
+<script src="${contextPath}/js/jquery-ui.min.js"></script>
+<script>
+    $(document).ready(
+        function () {
+            $("#starttime").datepicker({"dateFormat":"yy-mm-dd"});
+            $("#endtime").datepicker({"dateFormat":"yy-mm-dd"});
+
+            $("tbody").find(".course-state").each(function () {
+                var state = $(this).text();
+                if(state == "1" || state == "2" ){
+                    $(this).parent().next().children().remove();
+                }
+            });
+
+        }
+
+    );
+
+    $(".submit-btn").click(function () {
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            url:"/institution/createcourse",
+            data:$(".form-horizontal").serializeArray(),
+            success:function(data){
+                alert(data.msg);
+            }
+        });
+
+    });
+
+
+</script>
 </body>
 </html>

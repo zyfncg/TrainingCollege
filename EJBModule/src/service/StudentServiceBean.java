@@ -84,7 +84,7 @@ public class StudentServiceBean implements StudentService {
     @Override
     public boolean exchangePoint(String studentid) {
         Student student = studentDao.find(studentid);
-        double point = student.getPoint();
+        double point = student.getPoint()/10;
         Account account = student.getAccount();
         account.setMoney(account.getMoney() + point);
         student.setPoint(0);
@@ -115,6 +115,10 @@ public class StudentServiceBean implements StudentService {
             studCourse.setCourse(course);
             studCourse.setState(StudCourState.REVERSE);
             studCourseDao.addStudCourse(studCourse);
+            if(student.getVip()>0){
+                student.setPoint(student.getPoint()+ student.getVip()*price*0.1);
+                studentDao.update(student);
+            }
             return true;
         }else {
             return false;
@@ -179,6 +183,14 @@ public class StudentServiceBean implements StudentService {
         if(bankcard != null && bankcard.getBalance() > money){
             bankcardDao.withdraw(bankcard.getBankcardid(),money);
             accountDao.deposit(account.getAccountid(),money);
+            student = studentDao.find(studentid);
+            double balance = student.getAccount().getMoney();
+            if(student.getVip() == 0 && balance >= 1000){
+                student.setVip(1);
+            }else if(student.getVip()<0 && balance>0){
+                student.setVip(0-student.getVip());
+            }
+            studentDao.update(student);
         }else {
             return false;
         }

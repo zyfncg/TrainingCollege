@@ -58,7 +58,7 @@ public class Institution implements Serializable{
         this.account = account;
     }
 
-    @OneToMany(mappedBy = "institution",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "institution",cascade=CascadeType.MERGE,fetch=FetchType.EAGER)
     public List<Course> getCourses() {
         return courses;
     }

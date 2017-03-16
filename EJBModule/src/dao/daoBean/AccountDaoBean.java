@@ -25,6 +25,12 @@ public class AccountDaoBean implements AccountDao{
     }
 
     @Override
+    public Account find(String accountid) {
+        Account account = em.find(Account.class, accountid);
+        return account;
+    }
+
+    @Override
     public void deposit(String accountid, double money) {
         Account account = em.find(Account.class, accountid);
         account.setMoney(account.getMoney() + money);

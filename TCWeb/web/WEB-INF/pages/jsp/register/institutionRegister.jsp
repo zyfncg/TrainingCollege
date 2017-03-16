@@ -21,7 +21,7 @@
         <div class="form-group row">
             <label for="institutionid" class="col-md-2 control-label">机构编号</label>
             <div class="col-md-8">
-                <input type='text' id="institutionid" class="userid form-control" name='institutionid' value="${institutionid}" readonly="readonly" required>
+                <input type='text' id="institutionid" class="userid form-control" name='institutionid' value="${institutionid}" readonly="readonly">
             </div>
         </div>
         <div class="form-group row">

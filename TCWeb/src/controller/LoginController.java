@@ -6,6 +6,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import service.InstitutionService;
+import service.ManagerService;
 import service.StudentService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,7 +43,7 @@ public class LoginController {
             String contextpath = request.getScheme() +"://" + request.getServerName()  + ":" +request.getServerPort() +request.getContextPath();
             String urlpath = contextpath + "/login/student";
             model.addAttribute("urlPath",urlpath);
-            return "redirect:/login/loginFail";
+            return "login/loginFail";
         }
     }
 
@@ -68,7 +69,7 @@ public class LoginController {
             String contextpath = request.getScheme() +"://" + request.getServerName()  + ":" +request.getServerPort() +request.getContextPath();
             String urlpath = contextpath + "/login/institution";
             model.addAttribute("urlPath",urlpath);
-            return "redirect:/login/loginFail";
+            return "login/loginFail";
         }
     }
 
@@ -82,13 +83,19 @@ public class LoginController {
 
     @RequestMapping(value = "/managerCheck", method = RequestMethod.POST)
     public String checkManager(String login, String password,HttpServletRequest request, ModelMap model){
-        if(login.equals("5000001")){
-            return "redirect:/manager/manager";
+        ManagerService managerService = ServiceFactory.getManagerService();
+        if(managerService.checkPassword(login, password)){
+            HttpSession session = request.getSession(false);
+            if (session == null){
+                session = request.getSession(true);
+            }
+            session.setAttribute("managerid", login);
+            return "redirect:/TCManager/TCManager";
         }else{
             String contextpath = request.getScheme() +"://" + request.getServerName()  + ":" +request.getServerPort() +request.getContextPath();
             String urlpath = contextpath + "/login/manager";
             model.addAttribute("urlPath",urlpath);
-            return "redirect:/login/loginFail";
+            return "login/loginFail";
         }
     }
 

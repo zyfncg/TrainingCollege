@@ -5,6 +5,7 @@ import model.Account;
 import model.Course;
 import model.StudCourse;
 import model.Student;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import service.StudentService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,25 +27,29 @@ import java.util.Map;
 public class StudentController {
     private StudentService studentService = ServiceFactory.getStudentService();
     @RequestMapping(value = "/student")
-    public String studentHome(HttpServletRequest request, ModelMap model){
+    public String studentHome(HttpServletRequest request, ModelMap model,Principal principal){
 
         HttpSession session = request.getSession(false);
-        if(null == session){
-            return "redirect:/login/student";
+        if(session == null){
+            session = request.getSession(true);
         }
-        String studentid = (String)session.getAttribute("studentid");
-        if(null == studentid){
-            return "redirect:/login/student";
+        if(principal.getName() == null){
+            System.out.println("name is null");
         }
+        String studentid = principal.getName();
+
+        session.setAttribute("studentid", studentid);
 
         List<Course> unChooseCourses = studentService.getUnchooseCourses(studentid);
         List<StudCourse> reserveCourses = studentService.getReserveCourses(studentid);
         List<StudCourse> studyCourses = studentService.getStudyCourses(studentid);
+        List<StudCourse> dropCourses = studentService.getDropCourses(studentid);
         String contextpath = request.getScheme() +"://" + request.getServerName()  + ":" +request.getServerPort() +request.getContextPath();
         model.addAttribute("contextPath",contextpath);
         model.addAttribute("unchoooseCourses",unChooseCourses);
         model.addAttribute("resserveCourses",reserveCourses);
         model.addAttribute("studyCourses",studyCourses);
+        model.addAttribute("dropCourses",dropCourses);
 
         Student student = studentService.getStudentByID(studentid);
         Account account = student.getAccount();

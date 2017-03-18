@@ -21,20 +21,21 @@
     <h3>TRAINING COLLEGE</h3>
 </nav>
 <div class="body-page row">
-    <div class="user-nav col-md-3">
-        <div class="manager-info">
-            <h3>9000001</h3>
-            <h3>刘峰</h3>
+    <div class="authorUser-nav col-md-3">
+        <div class="manager-info" style="margin-bottom: 30px;text-align: center">
+            <h4>编号：${managerid}</h4>
+            <br>
+            <h4>姓名：${managerName}</h4>
         </div>
         <div class="console">
             <ul class="nav nav-tabs nav-stacked">
-                <li class="active"><a href="#approve-course" data-toggle="tab">审批课程</a></li>
-                <li ><a href="#balance" data-toggle="tab">结算</a></li>
-                <li ><a href="#statistics" data-toggle="tab">统计</a></li>
+                <li class="active"><a href="#approve-course" data-toggle="tab"><h4>审批课程</h4></a></li>
+                <li ><a href="#balance" data-toggle="tab"><h4>结算</h4></a></li>
+                <li ><a href="#statistics" data-toggle="tab"><h4>统计</h4></a></li>
             </ul>
         </div>
-        <div class="logout">
-            <h3><a href="${contextPath}/logout/manager">退出登录</a></h3>
+        <div class="logout" style="text-align: center;margin-top: 20px">
+            <h4><a href="${contextPath}/TCManager/logout">退出登录</a></h4>
         </div>
     </div>
     <div class="show-page col-md-9">
@@ -116,7 +117,6 @@
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#institution-statistic"  data-toggle='tab'>机构统计</a></li>
                         <li><a href="#student-statistic"  data-toggle='tab'>学员统计</a></li>
-                        <li><a href="#finance" data-toggle='tab'>财务统计</a></li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane fade in active" id="institution-statistic">
@@ -174,15 +174,7 @@
 
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="finance">
-                            <div class="finance-panel">
-                                <div class="row">
-                                    <div class="col-md-3 date-time">2016-01</div>
-                                    <div class="col-md-3 income">32000</div>
-                                    <div class="col-md-3 expend">19100</div>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>

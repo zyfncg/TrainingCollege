@@ -5,6 +5,7 @@ import model.Course;
 import model.Institution;
 import model.StudCourse;
 import modelBean.Grade;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,13 +34,12 @@ public class InstitutionController {
     @RequestMapping(value = "/institution")
     public String institutionHome(HttpServletRequest request, ModelMap model){
         HttpSession session = request.getSession(false);
-        if(null == session){
-            return "redirect:/login/institution";
+        if(session == null){
+            session = request.getSession(true);
         }
-        String institutionid = (String)session.getAttribute("institutionid");
-        if(null == institutionid){
-            return "redirect:/login/institution";
-        }
+        SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");
+        String institutionid = securityContextImpl.getAuthentication().getName();
+        session.setAttribute("institutionid", institutionid);
 
         String contextpath = request.getScheme() +"://" + request.getServerName()  + ":" +request.getServerPort() +request.getContextPath();
         model.addAttribute("contextPath",contextpath);

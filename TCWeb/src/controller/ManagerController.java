@@ -13,6 +13,7 @@ import service.ManagerService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,19 +28,25 @@ public class ManagerController {
     private ManagerService managerService = ServiceFactory.getManagerService();
 
     @RequestMapping(value = "/TCManager")
-    public String managerHome(HttpServletRequest request, ModelMap model){
+    public String managerHome(HttpServletRequest request, ModelMap model, Principal principal){
 
         HttpSession session = request.getSession(false);
-        if(null == session){
-            return "redirect:/login/manager";
+        if(session == null){
+            session = request.getSession(true);
         }
-        String managerid = (String)session.getAttribute("managerid");
-        if(null == managerid){
-            return "redirect:/login/manager";
+        if(principal.getName() == null){
+            System.out.println("name is null");
         }
+        String managerid = principal.getName();
+
+        session.setAttribute("managerid", managerid);
+        Manager manager = managerService.getManagetByID(managerid);
 
         String contextpath = request.getScheme() +"://" + request.getServerName()  + ":" +request.getServerPort() +request.getContextPath();
         model.addAttribute("contextPath",contextpath);
+        model.addAttribute("managerid",managerid);
+        model.addAttribute("managerName",manager.getName());
+
         List<Course> approveCourses = managerService.getApproveCourses();
         List<Course> settleCourses = managerService.getSettleCourses();
         List<StudentStat> studentStats = managerService.getStudentStat();

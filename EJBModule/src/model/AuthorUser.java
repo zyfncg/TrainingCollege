@@ -10,9 +10,9 @@ public class AuthorUser implements Serializable{
     private String password;
     private String role;
 
-    public final static String STUDENT = "student";
-    public final static String INSTITUTION = "institution";
-    public final static String MANAGER = "manager";
+    public final static String STUDENT = "ROLE_STUDENT";
+    public final static String INSTITUTION = "ROLE_INSTITUTION";
+    public final static String MANAGER = "ROLE_MANAGER";
 
     public String getUserid() {
         return userid;

@@ -19,7 +19,7 @@ public class LoginPageStrategy {
         } else if(uri.contains("/institution/")){
             targetUrl = "/login/institution";
         }else if(uri.contains("/TCManager/")){
-            targetUrl = "/login/TCManager";
+            targetUrl = "/login/manager";
         }
 
         targetUrl = request.getContextPath() + targetUrl;

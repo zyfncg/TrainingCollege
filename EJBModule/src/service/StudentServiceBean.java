@@ -157,6 +157,9 @@ public class StudentServiceBean implements StudentService {
     public boolean dropStudyCourse(String studentid, String courseid) {
         StudCourse studCourse = studCourseDao.getStudCourse(studentid,courseid);
         studCourse.setState(StudCourState.DROP);
+        Course course = studCourse.getCourse();
+        course.setDropNum(course.getDropNum()+1);
+        courseDao.updata(course);
         studCourseDao.updateStudCourse(studCourse);
         return true;
     }

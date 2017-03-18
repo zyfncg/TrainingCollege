@@ -24,79 +24,29 @@ public class LoginController {
     public String getStudentLoginPage(HttpServletRequest request, ModelMap model){
         String contextpath = request.getScheme() +"://" + request.getServerName()  + ":" +request.getServerPort() +request.getContextPath();
         model.addAttribute("contextPath",contextpath);
-        model.addAttribute("actionURL",contextpath+"/login/studentCheck");
+        model.addAttribute("actionURL",contextpath+"/student/studentCheck");
+        model.addAttribute("user","学生登录");
         return "login/login";
     }
 
-    @RequestMapping(value = "/studentCheck", method = RequestMethod.POST)
-    public String checkStudent(String login, String password,HttpServletRequest request, ModelMap model){
-        StudentService studentService = ServiceFactory.getStudentService();
-        if(studentService.checkPassword(login,password)){
-//        if(login.equals("1234567")){
-            HttpSession session = request.getSession(false);
-            if (session == null){
-                session = request.getSession(true);
-            }
-            session.setAttribute("studentid",login);
-            return "redirect:/student/student";
-        }else{
-            String contextpath = request.getScheme() +"://" + request.getServerName()  + ":" +request.getServerPort() +request.getContextPath();
-            String urlpath = contextpath + "/login/student";
-            model.addAttribute("urlPath",urlpath);
-            return "login/loginFail";
-        }
-    }
 
     @RequestMapping(value = "/institution", method = RequestMethod.GET)
     public String getInstitutionLoginPage(HttpServletRequest request, ModelMap model){
         String contextpath = request.getScheme() +"://" + request.getServerName()  + ":" +request.getServerPort() +request.getContextPath();
         model.addAttribute("contextPath",contextpath);
-        model.addAttribute("actionURL",contextpath+"/login/institutionCheck");
+        model.addAttribute("actionURL",contextpath+"/institution/institutionCheck");
+        model.addAttribute("user","机构登录");
         return "login/login";
-    }
-
-    @RequestMapping(value = "/institutionCheck", method = RequestMethod.POST)
-    public String checkInstitution(String login, String password,HttpServletRequest request, ModelMap model){
-        InstitutionService institutionService = ServiceFactory.getInstitutionService();
-        if(institutionService.checkPassword(login, password)){
-            HttpSession session = request.getSession(false);
-            if (session == null){
-                session = request.getSession(true);
-            }
-            session.setAttribute("institutionid", login);
-            return "redirect:/institution/institution";
-        }else{
-            String contextpath = request.getScheme() +"://" + request.getServerName()  + ":" +request.getServerPort() +request.getContextPath();
-            String urlpath = contextpath + "/login/institution";
-            model.addAttribute("urlPath",urlpath);
-            return "login/loginFail";
-        }
     }
 
     @RequestMapping(value = "/manager", method = RequestMethod.GET)
     public String getManagerLoginPage(HttpServletRequest request, ModelMap model){
         String contextpath = request.getScheme() +"://" + request.getServerName()  + ":" +request.getServerPort() +request.getContextPath();
         model.addAttribute("contextPath",contextpath);
-        model.addAttribute("actionURL",contextpath+"/login/managerCheck");
+        model.addAttribute("actionURL",contextpath+"/TCManager/managerCheck");
+        model.addAttribute("user","经理登录");
         return "login/login";
     }
 
-    @RequestMapping(value = "/managerCheck", method = RequestMethod.POST)
-    public String checkManager(String login, String password,HttpServletRequest request, ModelMap model){
-        ManagerService managerService = ServiceFactory.getManagerService();
-        if(managerService.checkPassword(login, password)){
-            HttpSession session = request.getSession(false);
-            if (session == null){
-                session = request.getSession(true);
-            }
-            session.setAttribute("managerid", login);
-            return "redirect:/TCManager/TCManager";
-        }else{
-            String contextpath = request.getScheme() +"://" + request.getServerName()  + ":" +request.getServerPort() +request.getContextPath();
-            String urlpath = contextpath + "/login/manager";
-            model.addAttribute("urlPath",urlpath);
-            return "login/loginFail";
-        }
-    }
 
 }

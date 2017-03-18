@@ -1,0 +1,62 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/security
+          http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <security:http pattern="/login/**"  security="none"/>
+    <security:http pattern="/css/**"  security="none"/>
+    <security:http pattern="/js/**"  security="none"/>
+    <security:http pattern="/student/**" auto-config='false' use-expressions="true" entry-point-ref="loginPageEntryPoint"
+                   authentication-manager-ref="authenticationManager">
+                    <security:intercept-url pattern="/student/**" access="hasRole('ROLE_STUDENT')" />
+                    <security:form-login login-page="/login/student" login-processing-url="/student/studentCheck"
+                         username-parameter="username"
+                         password-parameter="password"
+                         authentication-failure-url="/login/student?error=1"
+                         default-target-url="/student/student"
+                         always-use-default-target="true"/>
+                    <security:logout logout-success-url="/login/student?logout" logout-url="/student/logout" invalidate-session="true"/>
+
+                    <security:csrf disabled="true"/>
+    </security:http>
+    <security:http pattern="/institution/**" auto-config='false' use-expressions="true" entry-point-ref="loginPageEntryPoint"
+                   authentication-manager-ref="authenticationManager">
+        <security:intercept-url pattern="/institution/**" access="hasRole('ROLE_INSTITUTION')" />
+        <security:form-login login-page="/login/institution" login-processing-url="/institution/institutionCheck"
+                             username-parameter="username"
+                             password-parameter="password"
+                             authentication-failure-url="/login/institution?error=1"
+                             default-target-url="/institution/institution"
+                             always-use-default-target="true"/>
+        <security:logout logout-success-url="/login/institution?logout" logout-url="/institution/logout" invalidate-session="true"/>
+        <security:csrf disabled="true"/>
+    </security:http>
+
+    <security:http pattern="/TCManager/**" auto-config='false' use-expressions="true" entry-point-ref="loginPageEntryPoint"
+                   authentication-manager-ref="authenticationManager">
+        <security:intercept-url pattern="/TCManager/**" access="hasRole('ROLE_MANAGER')" />
+        <security:form-login login-page="/login/institution" login-processing-url="/TCManager/managerCheck"
+                             username-parameter="username"
+                             password-parameter="password"
+                             authentication-failure-url="/login/manager?error=1"
+                             default-target-url="/TCManager/TCManager"
+                             always-use-default-target="true"/>
+        <security:logout logout-success-url="/login/manager?logout" logout-url="/TCManager/logout" invalidate-session="true"/>
+        <security:csrf disabled="true"/>
+    </security:http>
+
+    <!--用户信息接口-->
+    <security:authentication-manager alias="authenticationManager">
+        <security:authentication-provider user-service-ref="customUserDetailsService"/>
+    </security:authentication-manager>
+    <bean id="customUserDetailsService" class="security.CustomUserDetailsService"/>
+    <bean id="loginPageEntryPoint" class="security.LoginPageEntryPoint">
+        <property name="loginPageStrategy" ref="urlMappingLoginPageStrategy"/>
+    </bean>
+    <bean id="urlMappingLoginPageStrategy" class="security.LoginPageStrategy"/>
+
+
+</beans>

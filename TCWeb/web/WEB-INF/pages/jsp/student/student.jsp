@@ -118,20 +118,22 @@
     </nav>
     <div class="body-page row">
         <div class="authorUser-nav col-md-3">
-            <div class="userinfo">
-                <h3>${studentid}</h3>
-                <h3>${studentName}</h3>
+            <div class="userinfo" style="text-align: center">
+                <h4>用户编号：${studentid}</h4>
+                <br>
+                <h4>用户名：${studentName}</h4>
             </div>
+            <br>
             <div class="console">
                 <ul class="nav nav-tabs nav-stacked">
-                    <li class="active"><a href="#course" data-toggle="tab">课程管理</a></li>
-                    <li ><a href="#account" data-toggle="tab">账户管理</a></li>
-                    <li ><a href="#vip" data-toggle="tab">会员管理</a></li>
-                    <li ><a href="#statistics" data-toggle="tab">统计分析</a></li>
+                    <li class="active"><a href="#course" data-toggle="tab"><h4>课程管理</h4></a></li>
+                    <li ><a href="#account" data-toggle="tab"><h4>账户管理</h4></a></li>
+                    <li ><a href="#vip" data-toggle="tab"><h4>会员管理</h4></a></li>
+                    <li ><a href="#statistics" data-toggle="tab"><h4>统计分析</h4></a></li>
                 </ul>
             </div>
-            <div class="logout">
-                <h3><a href="${contextPath}/logout/student">退出登录</a></h3>
+            <div class="logout" style="text-align: center;margin-top: 20px">
+                <h4><a href="${contextPath}/student/logout">退出登录</a></h4>
             </div>
         </div>
         <div class="show-page col-md-9">
@@ -321,6 +323,13 @@
                                         </thead>
                                         <tbody>
                                         <c:forEach var="course" items="${studyCourses}">
+                                            <tr>
+                                                <td>${course.scTime}</td>
+                                                <td>${course.course.courseName}</td>
+                                                <td>${course.course.price}</td>
+                                            </tr>
+                                        </c:forEach>
+                                        <c:forEach var="course" items="${dropCourses}">
                                             <tr>
                                                 <td>${course.scTime}</td>
                                                 <td>${course.course.courseName}</td>

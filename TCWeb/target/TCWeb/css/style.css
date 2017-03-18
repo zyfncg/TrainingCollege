@@ -34,11 +34,15 @@
     margin: 30px auto;
 }
 .submit-btn{
-    max-width: 300px;
+    max-width: 330px;
     align-content: center;
 }
 .userid,.name,.password{
     height: 45px;
+}
+.userinfo{
+    height: 80px;
+    margin-bottom: 30px;
 }
 h3{
     text-align: center;

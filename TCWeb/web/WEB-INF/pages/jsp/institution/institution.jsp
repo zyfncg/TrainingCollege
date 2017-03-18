@@ -23,19 +23,20 @@
 </nav>
 <div class="body-page row">
     <div class="authorUser-nav col-md-3">
-        <div class="institution-info">
-            <h3>${institutionid}</h3>
-            <h3>${institutionName}</h3>
+        <div class="institution-info" style="margin-bottom: 30px;text-align: center">
+            <h4>机构编号：${institutionid}</h4>
+            <br>
+            <h4>机构名称：${institutionName}</h4>
         </div>
         <div class="console">
             <ul class="nav nav-tabs nav-stacked">
-                <li class="active"><a href="#course" data-toggle="tab">班级管理</a></li>
-                <li ><a href="#student-record" data-toggle="tab">课程登记</a></li>
-                <li ><a href="#course-statistic" data-toggle="tab">课程统计</a></li>
+                <li class="active"><a href="#course" data-toggle="tab"><h4>班级管理</h4></a></li>
+                <li ><a href="#student-record" data-toggle="tab"><h4>课程登记</h4></a></li>
+                <li ><a href="#course-statistic" data-toggle="tab"><h4>课程统计</h4></a></li>
             </ul>
         </div>
-        <div class="logout">
-            <h3><a href="${contextPath}/logout/institution">退出登录</a></h3>
+        <div class="logout" style="text-align: center;margin-top: 20px">
+            <h4><a href="${contextPath}/institution/logout">退出登录</a></h4>
         </div>
     </div>
     <div class="show-page col-md-9">
@@ -68,8 +69,22 @@
                                         <td>${course.endTime}</td>
                                         <td>${course.teacher}</td>
                                         <td>${course.price}</td>
-                                        <td><span class="course-state">${course.approveState}</span></td>
-                                        <td><a class="modify-course " href="${contextPath}/institution/modifyCoursePage?courseid=${course.courseID}">修改</a></td>
+                                        <c:if test="${course.approveState == -1}">
+                                            <td><span class="course-state">未通过</span></td>
+                                            <td><a class="modify-course " href="${contextPath}/institution/modifyCoursePage?courseid=${course.courseID}">修改</a></td>
+                                        </c:if>
+                                        <c:if test="${course.approveState == 0}">
+                                            <td><span class="course-state">待审批</span></td>
+                                            <td><a class="modify-course " href="${contextPath}/institution/modifyCoursePage?courseid=${course.courseID}">修改</a></td>
+                                        </c:if>
+                                        <c:if test="${course.approveState == 1}">
+                                            <td><span class="course-state">通过</span></td>
+                                            <td></td>
+                                        </c:if>
+                                        <c:if test="${course.approveState > 1}">
+                                            <td><span class="course-state">已结课</span></td>
+                                            <td></td>
+                                        </c:if>
                                     </tr>
                                 </c:forEach>
                                 </tbody>
@@ -135,13 +150,15 @@
                         </thead>
                         <tbody>
                         <c:forEach var="course" items="${courseList}">
-                            <tr>
-                                <td>${course.courseName}</td>
-                                <td>${course.startTime}</td>
-                                <td>${course.endTime}</td>
-                                <td>${course.teacher}</td>
-                                <td><a href="${contextPath}/institution/recordgrade?courseid=${course.courseID}">登记</a></td>
-                            </tr>
+                            <c:if test="${course.approveState==1||course.approveState==2}">
+                                <tr>
+                                    <td>${course.courseName}</td>
+                                    <td>${course.startTime}</td>
+                                    <td>${course.endTime}</td>
+                                    <td>${course.teacher}</td>
+                                    <td><a href="${contextPath}/institution/recordgrade?courseid=${course.courseID}">登记</a></td>
+                                </tr>
+                            </c:if>
                         </c:forEach>
                         </tbody>
                     </table>
@@ -171,18 +188,18 @@
                             </thead>
                             <tbody>
                             <c:forEach var="course" items="${courseList}">
-                                <tr>
-                                    <td>${course.courseID}</td>
-                                    <td>${course.courseName}</td>
-                                    <td>${course.startTime}</td>
-                                    <td>${course.endTime}</td>
-                                    <td>${course.teacher}</td>
-                                    <td>${course.price}</td>
-                                    <td>${course.reserveNum}</td>
-                                    <td>${course.dropReserveNum}</td>
-                                    <td>${course.dropNum}</td>
-                                    <td>${course.income}</td>
-                                </tr>
+                                    <tr>
+                                        <td>${course.courseID}</td>
+                                        <td>${course.courseName}</td>
+                                        <td>${course.startTime}</td>
+                                        <td>${course.endTime}</td>
+                                        <td>${course.teacher}</td>
+                                        <td>${course.price}</td>
+                                        <td>${course.reserveNum}</td>
+                                        <td>${course.dropReserveNum}</td>
+                                        <td>${course.dropNum}</td>
+                                        <td>${course.income}</td>
+                                    </tr>
                             </c:forEach>
                             </tbody>
                         </table>
@@ -221,6 +238,7 @@
             data:$(".form-horizontal").serializeArray(),
             success:function(data){
                 alert(data.msg);
+                window.location.reload();
             }
         });
 

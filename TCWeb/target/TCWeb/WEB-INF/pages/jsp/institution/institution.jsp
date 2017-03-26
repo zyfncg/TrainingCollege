@@ -137,33 +137,76 @@
             </div>
 
             <div class="tab-pane fade" id="student-record">
-                <div class="course-list-panel">
-                    <table class="table table-responsive table-condensed">
-                        <thead>
-                        <tr>
-                            <th>课程名</th>
-                            <th>开始时间</th>
-                            <th>结束时间</th>
-                            <th>教师</th>
-                            <th>选择</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <c:forEach var="course" items="${courseList}">
-                            <c:if test="${course.approveState==1||course.approveState==2}">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#grade-record"  data-toggle='tab'>成绩登记</a></li>
+                    <li><a href="#course-record"  data-toggle='tab'>课程登记</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade in active" id="grade-record">
+                        <div class="course-list-panel">
+                            <table class="table table-responsive table-condensed">
+                                <thead>
                                 <tr>
-                                    <td>${course.courseName}</td>
-                                    <td>${course.startTime}</td>
-                                    <td>${course.endTime}</td>
-                                    <td>${course.teacher}</td>
-                                    <td><a href="${contextPath}/institution/recordgrade?courseid=${course.courseID}">登记</a></td>
+                                    <th>课程名</th>
+                                    <th>开始时间</th>
+                                    <th>结束时间</th>
+                                    <th>教师</th>
+                                    <th>选择</th>
                                 </tr>
-                            </c:if>
-                        </c:forEach>
-                        </tbody>
-                    </table>
+                                </thead>
+                                <tbody>
+                                <c:forEach var="course" items="${courseList}">
+                                    <c:if test="${course.approveState > 0}">
+                                        <tr>
+                                            <td>${course.courseName}</td>
+                                            <td>${course.startTime}</td>
+                                            <td>${course.endTime}</td>
+                                            <td>${course.teacher}</td>
+                                            <td><a href="${contextPath}/institution/recordgrade?courseid=${course.courseID}">登记</a></td>
+                                        </tr>
+                                    </c:if>
+                                </c:forEach>
+                                </tbody>
+                            </table>
 
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="course-record">
+                        <div class="course-list-panel">
+                            <table class="table table-responsive table-condensed table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>课程名</th>
+                                    <th>开始时间</th>
+                                    <th>结束时间</th>
+                                    <th>教师</th>
+                                    <th>价格</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <c:forEach var="course" items="${courseList}">
+                                    <c:if test="${course.approveState == 1}">
+                                        <tr>
+                                            <td>${course.courseName}</td>
+                                            <td>${course.startTime}</td>
+                                            <td>${course.endTime}</td>
+                                            <td>${course.teacher}</td>
+                                            <td>${course.price}</td>
+                                            <td><a class="choose-course" id="${course.courseID}" onclick="chooesCourse(this)">选课</a>
+                                                <span>/</span>
+                                                <a class="drop-course" id="${course.courseID}" onclick="dropCourse(this)">退课</a>
+                                            </td>
+                                        </tr>
+                                    </c:if>
+                                </c:forEach>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
                 </div>
+                
             </div>
             <div class="tab-pane fade" id="course-statistic">
                 <div class="balacne">
@@ -210,6 +253,15 @@
         </div>
     </div>
 </div>
+<div id="dialog-form" title="课程登记" style="display: none">
+    <p class="validateTips"></p>
+    <form>
+        <fieldset>
+            <label for="student-name">姓名</label>
+            <input type="text" name="student-name" id="student-name" class="text ui-widget-content ui-corner-all" style="border-radius: 6px;height: 25px">
+        </fieldset>
+    </form>
+</div>
 <script src="${contextPath}/js/jquery-3.1.1.min.js"></script>
 <script src="${contextPath}/js/bootstrap.min.js"></script>
 <script src="${contextPath}/js/jquery-ui.min.js"></script>
@@ -218,14 +270,7 @@
         function () {
             $("#starttime").datepicker({"dateFormat":"yy-mm-dd"});
             $("#endtime").datepicker({"dateFormat":"yy-mm-dd"});
-
-            $("tbody").find(".course-state").each(function () {
-                var state = $(this).text();
-                if(state == "1" || state == "2" ){
-                    $(this).parent().next().children().remove();
-                }
-            });
-
+            
         }
 
     );
@@ -244,6 +289,64 @@
 
     });
 
+    function chooesCourse(obj) {
+        var ele = $(obj);
+        var courseid = ele.attr("id");
+        $( "#dialog-form" ).dialog({
+            resizable: false,
+            height:240,
+            modal: true,
+            buttons: {
+                "确认": function() {
+                    $( this ).dialog( "close" );
+                    $.ajax({
+                        type: "POST",
+                        dataType: 'json',
+                        url:"/institution/choosecourse",
+                        data:{
+                            "courseid":courseid
+                        },
+                        success:function(data){
+                            alert(data.msg);
+                            window.location.reload();
+                        }
+                    });
+                },
+                "取消": function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+        });
+    }
+    function dropCourse(obj) {
+        var ele = $(obj);
+        var courseid = ele.attr("id");
+        $( "#dialog-form" ).dialog({
+            resizable: false,
+            height:240,
+            modal: true,
+            buttons: {
+                "确认": function() {
+                    $( this ).dialog( "close" );
+                    $.ajax({
+                        type: "POST",
+                        dataType: 'json',
+                        url:"/institution/dropcourse",
+                        data:{
+                            "courseid":courseid
+                        },
+                        success:function(data){
+                            alert(data.msg);
+                            window.location.reload();
+                        }
+                    });
+                },
+                "取消": function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+        });
+    }
 
 </script>
 </body>

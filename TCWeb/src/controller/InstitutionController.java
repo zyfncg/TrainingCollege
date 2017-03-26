@@ -168,4 +168,22 @@ public class InstitutionController {
         return map;
     }
 
+    @RequestMapping(value = "/choosecourse", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> chooseCourse(String courseid){
+        Map<String, Object> map = new HashMap<>();
+        institutionService.chooseCourse(courseid);
+        map.put("msg","选课成功");
+        return map;
+    }
+
+    @RequestMapping(value = "/dropcourse", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> dropeCourse(String courseid){
+        Map<String, Object> map = new HashMap<>();
+        institutionService.dropCourse(courseid);
+        map.put("msg","退课成功");
+        return map;
+    }
+
 }

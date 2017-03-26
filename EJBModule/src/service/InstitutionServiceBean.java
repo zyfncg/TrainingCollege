@@ -96,4 +96,18 @@ public class InstitutionServiceBean implements InstitutionService{
     public StudCourse getStudCourse(String studentid, String courseid) {
         return studCourseDao.getStudCourse(studentid, courseid);
     }
+
+    @Override
+    public void chooseCourse(String courseid) {
+        Course course = courseDao.getCourseByID(courseid);
+        course.setReserveNum(course.getReserveNum()+1);
+        courseDao.updata(course);
+    }
+
+    @Override
+    public void dropCourse(String courseid) {
+        Course course = courseDao.getCourseByID(courseid);
+        course.setDropNum(course.getDropNum()+1);
+        courseDao.updata(course);
+    }
 }

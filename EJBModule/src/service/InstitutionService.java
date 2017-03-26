@@ -32,4 +32,7 @@ public interface InstitutionService {
 
     public StudCourse getStudCourse(String studentid, String courseid);
 
+    public void chooseCourse(String courseid);
+    public void dropCourse(String courseid);
+
 }
